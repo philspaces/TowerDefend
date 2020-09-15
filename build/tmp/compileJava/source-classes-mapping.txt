@@ -1,6 +1,5 @@
-App.java
- App
- App$1
+Fortress.java
+ Fortress
 Robot.java
  Robot
 JFXArena.java
@@ -15,5 +14,6 @@ Score.java
  Score
 ArenaListener.java
  ArenaListener
-Fortress.java
- Fortress
+App.java
+ App
+ App$1

@@ -33,10 +33,7 @@ public class App extends Application {
                         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
                 String newMessage = logger.takeMessage();
                 if (newMessage != null) {
-                    String finalNewMessage = newMessage;
-                    Platform.runLater(() -> {
-                        loggerArea.appendText(finalNewMessage);
-                    });
+                    Platform.runLater(() -> loggerArea.appendText(newMessage));
                 }
             }
 
@@ -48,10 +45,7 @@ public class App extends Application {
                 //log Hit Robot
                 String newMessage = logger.takeMessage();
                 if (newMessage != null) {
-                    String finalNewMessage = newMessage;
-                    Platform.runLater(() -> {
-                        loggerArea.appendText(finalNewMessage);
-                    });
+                    Platform.runLater(() -> loggerArea.appendText(newMessage));
                 }
             }
 
@@ -63,10 +57,7 @@ public class App extends Application {
 
                 String newMessage = logger.takeMessage();
                 if (newMessage != null) {
-                    String finalNewMessage = newMessage;
-                    Platform.runLater(() -> {
-                        loggerArea.appendText(finalNewMessage);
-                    });
+                    Platform.runLater(() -> loggerArea.appendText(newMessage));
                 }
             }
 
@@ -77,10 +68,7 @@ public class App extends Application {
                         "==============================\n");
                 String newMessage = logger.takeMessage();
                 if (newMessage != null) {
-                    String finalNewMessage = newMessage;
-                    Platform.runLater(() -> {
-                        loggerArea.appendText(finalNewMessage);
-                    });
+                    Platform.runLater(() -> loggerArea.appendText(newMessage));
                 }
             }
 
@@ -89,9 +77,8 @@ public class App extends Application {
                 logger.addNewScore(String.valueOf(currentScore)); //add new score fine
                 String newScore = logger.takeScore();
                 if (newScore != null) {
-                    String finalNewScore = newScore;
                     Platform.runLater(() -> {
-                        Label newLabel = new Label("Score: " + finalNewScore);
+                        Label newLabel = new Label("Score: " + newScore);
                         toolbar.getItems().setAll(newLabel);
                     });
                 }
@@ -100,14 +87,11 @@ public class App extends Application {
             @Override
             public void gameOver(double finalScore) {
                 logger.addNewMessage("!!!!!!!!!!!!!!!!!!!!!!!GAME OVER!!!!!!!!!!!!!!!!!!!!!!!!\n" +
-                        "FINAL SCORE : " + finalScore +  "\n" +
+                        "FINAL SCORE : " + finalScore + "\n" +
                         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
                 String newMessage = logger.takeMessage();
                 if (newMessage != null) {
-                    String finalNewMessage = newMessage;
-                    Platform.runLater(() -> {
-                        loggerArea.appendText(finalNewMessage);
-                    });
+                    Platform.runLater(() -> loggerArea.appendText(newMessage));
                 }
             }
         });
