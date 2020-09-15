@@ -1,9 +1,11 @@
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 public class App extends Application {
@@ -11,9 +13,11 @@ public class App extends Application {
         launch();
     }
 
+
+
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Example App (JavaFX)");
+        stage.setTitle("Tower Defend Game");
         JFXArena arena = new JFXArena();
         Logger logger = new Logger();
 
@@ -21,8 +25,8 @@ public class App extends Application {
         Label label = new Label("Score: 0.0");
         toolbar.getItems().addAll(label);
 
-
         TextArea loggerArea = new TextArea();
+
 
 
         arena.addListener(new ArenaListener() {
@@ -96,6 +100,9 @@ public class App extends Application {
             }
         });
 
+
+        stage.setOnCloseRequest(App::handle);
+
         SplitPane splitPane = new SplitPane();
         splitPane.getItems().addAll(arena, loggerArea);
         arena.setMinWidth(300.0);
@@ -107,5 +114,9 @@ public class App extends Application {
         Scene scene = new Scene(contentPane, 800, 800);
         stage.setScene(scene);
         stage.show();
+    }
+    private static void handle(WindowEvent event) {
+        //force to clear all Threads when close window
+        System.exit(0);
     }
 }

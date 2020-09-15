@@ -120,7 +120,7 @@ public class Robot implements Runnable {
         setDirectionFlag(false);
         try {
             for (int i = 0; i < 10; i++) {
-                if(getDirectionFlag() == true || (directionX == 0 && directionY == 0) ) //direction race condition occur
+                if(getDirectionFlag() || (directionX == 0 && directionY == 0) ) //direction race condition occur
                     Thread.interrupted();
                 this.move(directionX / 10.0, directionY / 10.0);
                 Thread.sleep(50);
@@ -140,7 +140,7 @@ public class Robot implements Runnable {
                 support.firePropertyChange("directionFlag", false, directionFlag); //I SAID DO NOT MOVE IT
                 //find the next square to move to
                 //stop finding new direction when have desire square to go.
-                if ((directionX != 0 || directionY != 0) && getDirectionFlag() == false) {
+                if ((directionX != 0 || directionY != 0) && !getDirectionFlag()) {
                     processOfMoving();
                 }
             }

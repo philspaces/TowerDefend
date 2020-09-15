@@ -56,31 +56,25 @@ public class JFXArena extends Pane {
         getChildren().add(canvas);
 
         fortress = new Fortress(gridWidth / 2, gridHeight / 2);
-        Runnable spawnTask = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        Thread.sleep(2000); //default n value
-                        spawnRobot();
-                    }
-                } catch (InterruptedException e) {
-                    System.out.println("Stop Spawning Robots");
+        Runnable spawnTask = () -> {
+            try {
+                while (true) {
+                    Thread.sleep(2000); //default n value
+                    spawnRobot();
                 }
+            } catch (InterruptedException e) {
+                System.out.println("Stop Spawning Robots");
             }
         };
-        Runnable firingTask = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        Bullet bullet = firingQueue.take(); //wait until new bullet load
-                        shootBullet(bullet);
-                        Thread.sleep(1000); //wait for 1 second for next bullet
-                    }
-                } catch (InterruptedException e) {
-                    System.out.println("Stop Fire Queue");
+        Runnable firingTask = () -> {
+            try {
+                while (true) {
+                    Bullet bullet = firingQueue.take(); //wait until new bullet load
+                    shootBullet(bullet);
+                    Thread.sleep(1000); //wait for 1 second for next bullet
                 }
+            } catch (InterruptedException e) {
+                System.out.println("Stop Fire Queue");
             }
         };
         //notify App class to update GUI when the score change
@@ -208,9 +202,8 @@ public class JFXArena extends Pane {
                         for (ArenaListener listener : listeners) {
                             listener.reloadBullet(gridX, gridY); //
                         }
-
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        System.out.println("Stop Reload  Firing Queue");
                     }
                 }
             });
@@ -258,7 +251,7 @@ public class JFXArena extends Pane {
     private void spawnRobot() {
         double x = 0.0;
         double y = 0.0;
-        int robotDelay = 0;
+        int robotDelay;
 
         Random random = new Random();
         robotDelay = random.nextInt(2000 - 500) + 500; //range between 500~2000
@@ -297,26 +290,21 @@ public class JFXArena extends Pane {
                         for (ArenaListener listener : listeners) {
                             listener.gameOver(score.getTotalScore()); //notify App class to log
                         }
-                        try {
-                            scorePool.shutdownNow();
-
-                            firingPool.shutdownNow();
-                            spawnPool.shutdownNow();
-                            robotsPool.shutdown();
-                            while(!robotsPool.awaitTermination(1000,TimeUnit.MILLISECONDS))
-                                robotsPool.shutdown();
-
-                        } catch (InterruptedException e) {
-                            System.out.println("wait to shutdown all");
+                        scorePool.shutdownNow();
+                        firingPool.shutdownNow();
+                        spawnPool.shutdownNow();
+                        robotArmy.clear();
+                        for (Future e :robotThreadIndicator) {
+                            e.cancel(true);
                         }
-
+                        robotsPool.shutdownNow();
                     }
                     requestLayout(); //update robot movement
                 }
         );
         if (!isOccupied(newRobot)) {
             robotArmy.add(newRobot);
-            robotCounter++;
+            robotCounter += 1;
             robotThreadIndicator.add(robotsPool.submit(newRobot));
             for (ArenaListener listener : listeners) {
                 listener.spawnRobot(newRobot.getId()); //notify App class to log
@@ -377,13 +365,11 @@ public class JFXArena extends Pane {
             for (Robot e : robotArmy) {
                 drawImage(gfx, e.getImage(), e.getPositionX(), e.getPositionY());
                 drawLabel(gfx, String.valueOf(e.getId()), e.getPositionX(), e.getPositionY());
-                if (e.getDirectionFlag() == false) // trying to move
+                if (!e.getDirectionFlag()) // trying to move
                 {
                     drawLine(gfx, e.getPositionX(), e.getPositionY(), e.getPositionX() + e.getDirectionX(), e.getPositionY() + e.getDirectionY());
                 }
             }
-
-
         }
     }
 
