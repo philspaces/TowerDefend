@@ -1,0 +1,21 @@
+// Note: see https://openjfx.io/openjfx-docs/#gradle.
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+}
+
+repositories {
+    jcenter()
+}
+
+javafx {
+    version = "11.0.2"
+    modules = [ 'javafx.controls' ]
+}
+
+application {
+    // Define the main class for the application
+    mainClassName = 'App'
+}
