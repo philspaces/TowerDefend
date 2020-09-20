@@ -29,6 +29,12 @@ public class App extends Application {
 
 
 
+//        App class listen to arena events to update GUI:
+//        event list:
+//                    + new robots spawn
+//                    + bullet events: reload, shoot - miss/hit
+//                    + score increase
+//                    + game over
         arena.addListener(new ArenaListener() {
             @Override
             public void reloadBullet(double x, double y) {
@@ -105,7 +111,9 @@ public class App extends Application {
 
         SplitPane splitPane = new SplitPane();
         splitPane.getItems().addAll(arena, loggerArea);
+
         arena.setMinWidth(300.0);
+        arena.startGame();
 
         BorderPane contentPane = new BorderPane();
         contentPane.setTop(toolbar);
@@ -119,4 +127,5 @@ public class App extends Application {
         //force to clear all Threads when close window
         System.exit(0);
     }
+
 }

@@ -120,13 +120,13 @@ public class Robot implements Runnable {
         setDirectionFlag(false);
         try {
             for (int i = 0; i < 10; i++) {
-                if(getDirectionFlag() || (directionX == 0 && directionY == 0) ) //direction race condition occur
+                if(getDirectionFlag() || (directionX == 0 && directionY == 0) ) //being shutdown
                     Thread.interrupted();
                 this.move(directionX / 10.0, directionY / 10.0);
                 Thread.sleep(50);
             }
         } catch (InterruptedException e) {
-            System.out.println("Robot " + id + " Killed While moving");
+            System.out.println("(thread shutdown) Robot " + id + " Killed While moving");
         }
 
     }
@@ -135,9 +135,9 @@ public class Robot implements Runnable {
     public void run() {
         try {
             while (true) {
-                Thread.sleep(delay); //process of moving 500ms
+                Thread.sleep(delay); //wait for next available move
                 setDirectionFlag(true); //do not move this line
-                support.firePropertyChange("directionFlag", false, directionFlag); //I SAID DO NOT MOVE IT
+                support.firePropertyChange("directionFlag", false, directionFlag);
                 //find the next square to move to
                 //stop finding new direction when have desire square to go.
                 if ((directionX != 0 || directionY != 0) && !getDirectionFlag()) {
@@ -145,7 +145,7 @@ public class Robot implements Runnable {
                 }
             }
         } catch (InterruptedException e) {
-            System.out.println("Robot class: Robot " + id + " killed");
+            System.out.println("(thread shutdown) Robot class: Robot " + id + "  killed");
         }
 
     }

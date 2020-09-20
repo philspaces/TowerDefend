@@ -17,8 +17,8 @@ public class JFXArena extends Pane {
 
     // The following values are arbitrary, and you may need to modify them according to the 
     // requirements of your application.
-    public static final int gridWidth = 5;
-    public static final int gridHeight = 5;
+    public static final int gridWidth = 9;
+    public static final int gridHeight = 9;
 
     private Score score = new Score();
     private Fortress fortress;
@@ -27,7 +27,7 @@ public class JFXArena extends Pane {
     private List<Robot> robotArmy = Collections.synchronizedList(new ArrayList<>());
     private List<Future> robotThreadIndicator = new ArrayList<>();
     // robotPool control robot characteristic: one each
-    private ExecutorService robotsPool = Executors.newFixedThreadPool(5 * 5); //fully occupied
+    private ExecutorService robotsPool = Executors.newFixedThreadPool(gridWidth * gridHeight); //fully occupied
     //spawnPool will spawn robot
     private ExecutorService spawnPool = Executors.newSingleThreadExecutor();
 
@@ -54,7 +54,9 @@ public class JFXArena extends Pane {
         canvas.widthProperty().bind(widthProperty());
         canvas.heightProperty().bind(heightProperty());
         getChildren().add(canvas);
+    }
 
+    public void startGame(){
         fortress = new Fortress(gridWidth / 2, gridHeight / 2);
         Runnable spawnTask = () -> {
             try {
@@ -305,7 +307,7 @@ public class JFXArena extends Pane {
         if (!isOccupied(newRobot)) {
             robotArmy.add(newRobot);
             robotCounter += 1;
-            robotThreadIndicator.add(robotsPool.submit(newRobot));
+            robotThreadIndicator.add(robotsPool.submit(newRobot)); //start robot movement(task) thread
             for (ArenaListener listener : listeners) {
                 listener.spawnRobot(newRobot.getId()); //notify App class to log
             }
