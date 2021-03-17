@@ -1,10 +1,8 @@
-import com.sun.jdi.InternalException;
 import javafx.scene.image.Image;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.InputStream;
-import java.util.concurrent.*;
 
 public class Robot implements Runnable {
     //robot characteristics

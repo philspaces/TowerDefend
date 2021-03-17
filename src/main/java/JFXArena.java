@@ -102,6 +102,7 @@ public class JFXArena extends Pane {
                 if ((robot.getPositionX() == x)
                         && robot.getPositionY() == y) {
                     occupied = true;
+                    return occupied;
                 }
             }
         }
@@ -123,6 +124,7 @@ public class JFXArena extends Pane {
                         occupied = true;
                         checkRobot.resetDirection();
                         checkRobot.setDirectionFlag(true);
+                        return occupied;
                     }
                     //robot occupy current square
                     if (((((int) (robot.getPositionX()) == (int) (checkRobot.getPositionX() + checkRobot.getDirectionX()))
@@ -130,6 +132,8 @@ public class JFXArena extends Pane {
                         occupied = true;
                         checkRobot.resetDirection();
                         checkRobot.setDirectionFlag(true);
+                        return occupied;
+
                     }
                 }
             }
@@ -202,7 +206,6 @@ public class JFXArena extends Pane {
                         Bullet newBullet = new Bullet(gridX, gridY);
                         firingQueue.put(newBullet);
                         for (ArenaListener listener : listeners) {
-                            listener.reloadBullet(gridX, gridY); //
                         }
                     } catch (InterruptedException e) {
                         System.out.println("Stop Reload  Firing Queue");
